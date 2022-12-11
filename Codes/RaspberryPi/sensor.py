@@ -2,7 +2,6 @@ import os
 import time
 from datetime import datetime
 import glob
-# import MySQLdb // for MySQL database
 import adafruit_dht
 import pymongo
 from pymongo import MongoClient
@@ -10,7 +9,6 @@ import RPi.GPIO as GPIO
 from time import strftime
 import board
 import requests
-from bs4 import BeautifulSoup
 import pytz
 
 GPIO.setmode(GPIO.BCM)
@@ -73,7 +71,7 @@ data = str.split('\n')
 #time2 = data[0]
 sky = data[1]
 
-# getting all div tag
+# getting all div tag   
 listdiv = soup.findAll('div', attrs={'class': 'BNeawe s3v9rd AP7Wnd'})
 strd = listdiv[5].text
 
