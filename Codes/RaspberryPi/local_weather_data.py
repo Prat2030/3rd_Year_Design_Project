@@ -1,5 +1,6 @@
 # importing library
 import requests
+import re
 from bs4 import BeautifulSoup
 
 # enter city name
@@ -16,7 +17,8 @@ str = soup.find('div', attrs={'class': 'BNeawe tAd8D AP7Wnd'}).text
 
 # formatting data
 data = str.split('\n')
-time = data[0]
+time_pattern = re.compile(r'\d.+')
+time = time_pattern.search(data[0]).group().strip()
 sky = data[1]
 
 # getting all div tag
@@ -29,8 +31,14 @@ other_data = strd[pos:]
 
 # printing all data
 print("Temperature is", temp)
-print("Time: ", time)
-print("Sky Description: ", sky)
+temps = temp.replace(u"°C", "")
+a = 10
+diff = a - int(temps)
+print(diff)
+print("Time:", time)
+print("Sky Description:", sky)
+sky = chr(sky)
+print(type(sky))
 print(other_data)
 
 # # Python code to display schematic weather details

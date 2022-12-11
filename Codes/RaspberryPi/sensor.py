@@ -1,6 +1,6 @@
 import os
 import time
-from datatime import datetime
+from datetime import datetime
 import glob
 # import MySQLdb // for MySQL database
 import adafruit_dht
@@ -11,6 +11,7 @@ from time import strftime
 import board
 import requests
 from bs4 import BeautifulSoup
+import pytz
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(4, GPIO.IN)    #4 is the pin number for LDR
@@ -24,11 +25,18 @@ collection = db['sensorData']
 sensors = adafruit_dht.DHT11(board.D22)
 
 def dateTime():
-        now = datetime.now()
-        date = now.strftime("%Y-%m-%d")
-        times = now.strftime("%H:%M:%S")
-        datetimes = date + " " + times
-        return datetimes
+        # IST = pytz.timezone('Asia/Kolkata')
+        # datetime_ist = datetime.now(IST)
+        currentDateTime = datetime.now()
+        # datetime_ist.strftime('%H:%M:%S')
+        # now = datetime.now()
+        # date = now.strftime("%Y-%m-%d")
+        # times = now.strftime("%H:%M:%S")
+        date = currentDateTime.strftime("%Y-%m-%d")
+        # times = currentDateTime.strftime("%H:%M:%S")
+        # datetimes = date + " " + times
+        # datetimes = date
+        return date
 
 def tempRead(): #read temperature, return float with 3 decimal places
         temperature = sensors.temperature
@@ -62,7 +70,7 @@ str = soup.find('div', attrs={'class': 'BNeawe tAd8D AP7Wnd'}).text
 
 # formatting data
 data = str.split('\n')
-# time = data[0]
+#time2 = data[0]
 sky = data[1]
 
 # getting all div tag
@@ -89,7 +97,8 @@ lighting = ldrRead()
 def mongoWrite(): 
         temps = temp.replace(u"°C", "")
         tempDiff = abs(temperatures - float(temps[:-1]))
-        data = {"room":"9001", "time": secs, "temperature": temperatures, "humidity": humiditys, "local weather": temps, "sky description": sky,"temperature difference": tempDiff}
+        # data = {"room":"9001", "time": secs, "temperature": temperatures, "humidity": humiditys, "local weather": temps, "sky description": sky,"temperature difference": tempDiff}
+        data = {"room":"9001", "date": secs, "time": time2,"temperature": temperatures, "humidity": humiditys, "local weather": temps, "sky description": sky,"temperature difference": tempDiff}
         collection.insert_one(data)
         return True
 
